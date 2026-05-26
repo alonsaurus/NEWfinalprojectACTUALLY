@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Uncial+Antiqua&display=swap');
+
+:root {
+  --green:    #2d4a1e;
+  --brown:     #3e2a10;
+  --lotsofgreen:  #4a7c3f;
+  --lightgreen:   #7ab648;
+  --cream:   #f5edd6;
+  --gray:   #8a8a8a;
+  --light:    #f5edd6;
+  --dark: #1a1a0a;
+}
+
+body {
+  background-color: var(--green);
+  color: var(--light);
+  font-family: 'Cinzel', Georgia, serif;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* this is the main box*/
+.container, main, #app {
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--brown);
+  border: 2px solid var(--lotsofgreen);
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* border */
+hr { border: none; border-top: 1px solid var(--lotsofgreen); margin: 1.5rem 0; }
+
+a { color: var(--lightgreen); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
+h1 {
+  font-family: 'Uncial Antiqua', cursive;
+  font-size: 2.8rem;
+  color: var(--lightgreen);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+h2, h3 { color: var(--cream); margin-bottom: 0.75rem; }
+
+
+/* this is the question box*/
+#question, .question-box {
+  background-color: var(--cream);
+  color: var(--dark);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  padding: 1.5rem 1.75rem;
+  border-radius: 8px;
+  border: 2px solid var(--brown);
+  border-left: 5px solid var(--lotsofgreen);
+  margin-bottom: 1.75rem;
+}
+
+/* these are the button boxoes */
+button, .btn, #btn1, #btn2, #btn3, #btn4 {
+  display: block;
+  width: 100%;
+  background-color: var(--green);
+  color: var(--cream);
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--lotsofgreen);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.18s, color 0.18s;
+}
+
+
+/* media queries for laptop and phone*/
+@media (min-width: 1024px) {
+  body { padding: 3rem 2rem; }
+
+  .container, main, #app {
+    width: 75%;
+    padding: 3rem 3.5rem;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  #login-box, .login-box { width: 220px; flex-shrink: 0; }
+
+  h1 { font-size: 3.2rem; }
+  #question, .question-box { font-size: 1.2rem; padding: 1.75rem 2rem; }
+  button, .btn, #btn1, #btn2, #btn3, #btn4 { font-size: 1rem; padding: 1rem 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 0; }
+
+  .container, main, #app {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 1.5rem 1rem;
+    flex-direction: column;
+  }
+
+  #task-submitter { order: 1; }
+  #login-box, .login-box { order: 2; margin-top: 2rem; padding: 1rem; }
+
+  h1 { font-size: 1.9rem; }
+  h2 { font-size: 1.1rem; }
+  #question, .question-box { font-size: 0.95rem; padding: 1rem 1.1rem; }
+  button, .btn, #btn1, #btn2, #btn3, #btn4 { font-size: 0.88rem; padding: 0.75rem 1rem; }
+}
