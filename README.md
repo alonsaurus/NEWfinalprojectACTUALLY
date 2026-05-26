@@ -1,9 +1,3 @@
-# supabase-basic-with-auth
-a very basic supabase CRUD app, but with a working login
+this is my final project for cs2
 
-
-swap in your URL, anon key, and table name
-
-turn on email and password authentication
-
-fiddle with the RLS to suit your tastes
+shrek themed trivia app, with a way to store points in a database (i havent done that yet)
