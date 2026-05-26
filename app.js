@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // connect to api
 let url = 'https://opentdb.com/api.php?amount=1&category=17&type=multiple'
@@ -46,17 +47,17 @@ document.getElementById('btn4').onclick = function() { checkAnswer(document.getE
 
 //FROM OLD PROJECT
 // Sign up a new user
-async function signUp(email, password) {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+// async function signUp(email, password) {
+//     const { data, error } = await supabase.auth.signUp({ email, password });
 
-    if (error) {
-        console.error("Sign-up error:", error.message);
-    } else if (data.user) {
-        console.log("User signed up:", data.user);
-    } else {
-        console.log("Sign-up successful, but no user data returned.");
-    }
-}
+//     if (error) {
+//         console.error("Sign-up error:", error.message);
+//     } else if (data.user) {
+//         console.log("User signed up:", data.user);
+//     } else {
+//         console.log("Sign-up successful, but no user data returned.");
+//     }
+// }
 // Log in an existing user
 async function logIn(email, password) {
     const { data: session, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -68,7 +69,7 @@ async function logIn(email, password) {
         // Change UI to logged in state
         document.getElementById('task-submitter').style.display = 'block';
         document.getElementById('login-box').style.display = 'none';
-        await requestTrivia();
+        requestTrivia();
     }
 }
 // Log out the current user
