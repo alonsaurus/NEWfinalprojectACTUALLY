@@ -94,7 +94,7 @@ button, .btn, #btn1, #btn2, #btn3, #btn4 {
     gap: 2rem;
   }
 
-  #login-box, .login-box { width: 220px; flex-shrink: 0; }
+  #login-box, .login-box, { width: 220px; flex-shrink: 0; }
 
   h1 { font-size: 3.2rem; }
   #question, .question-box { font-size: 1.2rem; padding: 1.75rem 2rem; }

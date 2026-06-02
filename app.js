@@ -6,8 +6,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // connect to api
 let url = 'https://opentdb.com/api.php?amount=1&category=17&type=multiple'
-
+//add a global scope of add points function here
 let correctAnswer = "";
+
 
 //reference: poemdb thing from a while ago
 async function requestTrivia() {
@@ -29,21 +30,83 @@ async function requestTrivia() {
         console.log("done loading trivia");
 }
 //checks the answer, then reloads a new question
-function checkAnswer(answer) {
+async function checkAnswer(answer) {
     if (answer === correctAnswer) {
         alert("Shrektacular! Shrek is proud of you");
+        await updatePoints();
+        await displayPoints();
     } else {
         alert("Wrong! Shrek ate your onion. GO CRY IN YOUR SWAMP YOU ONIONLESS LOSER");
     }
-    requestTrivia();
+    setTimeout(requestTrivia, 1000); //this makes it wait a second before loading the next question so that the api doesnt freak out
 }
 //connects the html buttons to the check answer function so that the choices display on the button
-document.getElementById('btn1').onclick = function() { checkAnswer(document.getElementById('btn1').innerText); };
-document.getElementById('btn2').onclick = function() { checkAnswer(document.getElementById('btn2').innerText); };
-document.getElementById('btn3').onclick = function() { checkAnswer(document.getElementById('btn3').innerText); };
-document.getElementById('btn4').onclick = function() { checkAnswer(document.getElementById('btn4').innerText); };
+document.getElementById('btn1').addEventListener('click', function() {
+    checkAnswer(document.getElementById('btn1').innerText);});
+document.getElementById('btn2').addEventListener('click', function() {
+    checkAnswer(document.getElementById('btn2').innerText);});
+document.getElementById('btn3').addEventListener('click', function() {
+    checkAnswer(document.getElementById('btn3').innerText);});
+document.getElementById('btn4').addEventListener('click', function() {
+    checkAnswer(document.getElementById('btn4').innerText);});
 
+//POINTS SYSTEM
+async function updatePoints() {
+    const sessionData = await supabase.auth.getSession();
+    const userId = sessionData.data.session.user.id;
 
+    const result = await supabase
+        .from('finalproject')
+        .select('points')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (result.data === null) {
+        await supabase.from('finalproject').insert({ user_id: userId, points: 1 });
+    } else {
+        await supabase.from('finalproject').update({ points: result.data.points + 1 }).eq('user_id', userId);
+    }
+}
+
+async function displayPoints() { //modified from old project and also googled a bunch of stuff
+    const sessionData = await supabase.auth.getSession();
+    const userId = sessionData.data.session.user.id;
+
+    const result = await supabase
+        .from('finalproject')
+        .select('points')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (result.data !== null) {
+        document.getElementById('points').innerText = "Points: " + result.data.points;
+    }
+}
+
+// Function to read tasks
+async function getTasks() {
+    const { data, error: userError } = await supabase.auth.getUser();
+    console.log("User data:", data);
+    const user = data?.user; // Access the user from the data object
+
+    if (userError || !user) {
+        console.error("Error fetching user or user not logged in:", userError);
+        return [];
+    }
+
+    const { data: tasks, error } = await supabase
+        .from('finalproject')
+        .select('*')
+        .eq('user_id', user.id); // Filter tasks by the logged-in user's ID
+
+    if (error) {
+        console.error('Error fetching points:', error);
+        return [];
+    } else {
+        console.log('Points fetched:', tasks);
+        return tasks;
+    }
+}
 
 //FROM OLD PROJECT
 // Sign up a new user
@@ -68,19 +131,33 @@ async function logIn(email, password) {
         console.log("User logged in:", session.user); // Access the user from the session object
         // Change UI to logged in state
         document.getElementById('task-submitter').style.display = 'block';
-        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('login-zone').style.display = 'none';
         requestTrivia();
+        await displayPoints();
     }
 }
 // Log out the current user
 async function logOut() {
+    localStorage.clear(); //this prevents the auto sign in
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Logout error:", error);
     else {
         console.log("User logged out");
-        location.reload();
     };
 }
+
+document.getElementById("login-btn").addEventListener("click", () => {
+    logIn(
+        document.getElementById("email").value,
+        document.getElementById("password").value
+    );
+});
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+    logOut();
+    console.log(session.user);
+    debugger;
+});
 
 // Check for an existing session on page load
 async function checkSession() {
@@ -98,7 +175,7 @@ const btn4 = document.getElementById('btn4');
         console.log("User is already logged in:", session.user);
         // Change UI to logged in state
         document.getElementById('task-submitter').style.display = 'block';
-        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('login-zone').style.display = 'none';
         await requestTrivia();
     } else {
         console.log("No active session found.");
@@ -107,10 +184,9 @@ const btn4 = document.getElementById('btn4');
 
 // Listen for authentication state changes
 supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN") {
-        console.log("User signed in:", session.user);
-    } else if (event === "SIGNED_OUT") {
+    if (event === "SIGNED_OUT") {
         console.log("User signed out.");
+        setTimeout(() => location.reload(), 500);
     }
 });
 
