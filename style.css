@@ -32,6 +32,13 @@ body {
   flex-direction: column;
 }
 
+.pic {
+    width: 1000%;
+    max-width: 200px;
+    display: block;
+    margin: 1.5rem auto;
+}
+
 /* border */
 hr { border: none; border-top: 1px solid var(--lotsofgreen); margin: 1.5rem 0; }
 
@@ -115,7 +122,7 @@ button, .btn, #btn1, #btn2, #btn3, #btn4 {
   }
 
   #task-submitter { order: 1; }
-  #login-box, .login-box { order: 2; margin-top: 2rem; padding: 1rem; }
+  #login-box, .login-box, { order: 2; margin-top: 2rem; padding: 1rem; }
 
   h1 { font-size: 1.9rem; }
   h2 { font-size: 1.1rem; }
